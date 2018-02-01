@@ -1,0 +1,209 @@
+﻿html, body
+{
+    height: 100%;
+    width: 100%;
+    margin: 0;
+    padding: 0;
+    /*background-color:lightblue;*/
+    background-image: url('Images/gray_gradient.png');
+    font-family:Arial, Helvetica, sans-serif;
+	font-size:0.78em;
+}
+
+.container
+{
+    position: absolute;
+    top: 0px;
+    bottom: 0px;
+    left: 0px;
+    right: 0px;
+    margin-left: auto;
+    margin-right: auto;
+    width: 968px;
+   
+}
+
+.header
+{
+    background-image: url('Images/header-bg.png');
+    height: 100px;
+}
+
+.logo
+{
+    position: absolute;
+    left: 29px;
+    top: 12px;
+}
+
+    .logo a {
+        text-decoration:none;
+    }
+
+.body
+{
+    position: absolute;
+    top: 100px;
+    bottom: 0px;
+    left: 0px;
+    right: 0px;
+    /*background-image: url('../Images/page-container.png');*/
+    /*background-repeat: repeat-y;*/
+    margin-top: 0px;
+    margin-bottom: 0px;
+}
+
+.titleImg {
+    position: absolute;
+    left: 429px;
+    top: 52px;
+}
+
+.leftPane
+{
+    position: absolute;
+    left: 0px;
+    top: 0px;
+    bottom: 30px;
+    width: 245px;
+    overflow:hidden;
+    padding-top: 0px;
+    background-color: lightgray;
+    
+}
+
+.ribbonColumn {
+    position: absolute;
+    top: 15px;
+    left: 0px;
+    width: 250px;
+    height: 287px;
+    background-image: url('Images/ribbon_column.png');
+    background-repeat: no-repeat;
+    background-position: top left;
+    padding-left: 18px;
+    margin-top: 0px;
+}
+
+.resultsDiv {
+    margin-top: 23px;
+    width: 200px;
+    min-height: 300px;
+    margin-left: 0px;
+    font-style:italic;
+    font-size:10px;
+}
+
+.resultsBox {
+    width: 200px;
+}
+
+.mapFrame
+{
+    position: absolute;
+    left: 215px;
+    top: 100px;
+    bottom: 30px;
+    right:0px;
+}
+
+.mapFooter {
+    
+    position: absolute;
+    height: 22px;
+    left: 20px;
+    right: 20px;
+    bottom: 0px;
+    text-align:center;
+    padding-top: 6px;
+    border-top: 1px solid #dadada;
+    font-size: 8pt;
+}
+
+.msgBox {
+    border-top: 1px dashed #dadada;
+    width: 210px;
+    margin-top: 20px;
+    padding-top: 20px;
+}
+
+.roundedCorners
+{
+    -webkit-border-radius: 4px;
+    -moz-border-radius: 4px;
+    border-radius: 4px;
+}
+
+.shadow
+{
+    box-shadow: 4px 4px 8px #adadad;
+    -webkit-box-shadow: 4px 4px 8px #adadad;
+    -moz-box-shadow: 4px 4px 8px #adadad;
+    -o-box-shadow: 4px 4px 8px #adadad;
+}
+
+#address
+{
+    height: 50px;
+}
+
+#btnTA 
+{
+    visibility: collapse;
+}
+
+.btn 
+{
+   padding-top:-5px;
+   
+   font-family: Arial;
+   font-size:12px;
+
+}
+
+#btnlocate 
+{
+   
+    margin-left:34px;
+}
+
+#btnTA 
+{
+   
+    margin-left:20px;
+    color:red;
+
+}
+
+#oprleftlogo
+{
+    
+    padding-left:15px;
+    margin-bottom:2px;
+    margin-top:20px;
+}
+
+.resulttext
+{
+    margin-left:2px;
+
+
+}
+
+#btnGenerate 
+{
+    margin-left:14px;
+    color:red;
+
+}
+
+
+#TextZip
+{
+    margin-bottom: 1px;
+}
+
+#Textemail
+{
+    margin-bottom: 1px;
+}

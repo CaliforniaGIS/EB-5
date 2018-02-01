@@ -1,0 +1,391 @@
+﻿<!DOCTYPE html>
+<!--
+HTML 5/Standards
+-->
+<html>
+    <head>
+        <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+        <meta http-equiv="X-UA-Compatible" content="IE=7, IE=8, IE=9, IE=10">
+        <title>TEA Finder</title>
+        <link rel="stylesheet" href="http://serverapi.arcgisonline.com/jsapi/arcgis/3.5/js/dojo/dijit/themes/claro/claro.css">
+        <link rel="stylesheet" href="http://serverapi.arcgisonline.com/jsapi/arcgis/3.5/js/esri/css/esri.css">
+        <link rel="stylesheet" href="Site.css" />
+
+        <script src="http://ajax.aspnetcdn.com/ajax/jQuery/jquery-1.10.2.min.js"></script>
+        <script>var dojoConfig = { parseOnLoad: true };</script>
+        <script src="js/CaliforniaGeocoder.js" type="text/javascript"></script>
+        <script src="http://js.arcgis.com/3.5/"></script>
+        <script>
+
+
+            dojo.require("esri.map");
+            dojo.require("esri.tasks.locator");
+            dojo.require("esri.symbols.SimpleFillSymbol");
+            dojo.require("esri.symbols.SimpleLineSymbol");
+            dojo.require("esri.layers.ArcGISDynamicMapServiceLayer");
+            dojo.require("esri.tasks.geometry");
+            dojo.require("esri.graphic");
+
+            dojo.require("esri.tasks.GeometryService");
+            dojo.require("esri.SpatialReference");
+            dojo.require("esri.tasks.identify");
+            dojo.require("esri.tasks.ProjectParameters");
+
+
+            var map, locator, counter, passgeom, MatchedAddress, AddressArray;
+            var GName, GOName, BPlacename, email, geom, Gtype, fillSymbol, gsvc, layerid, feature;
+            var counter = 0;
+            var geocoder = new CaliforniaGeocoder(handleSuccess, handleError);
+            var address;
+
+            function init() {
+
+
+                map = new esri.Map("map", {
+                    basemap: "streets",
+                    center: [-119.800, 37.455],
+                    zoom: 6,
+
+                    logo: false
+
+                });
+
+                counter = 0;
+
+               
+                esriConfig.defaults.io.proxyUrl = "/arcgisserver/apis/javascript/proxy/proxy.ashx";
+                esriConfig.defaults.io.alwaysUseProxy = false;
+
+
+                locator = new esri.tasks.Locator("http://geocode.arcgis.com/arcgis/rest/services/World/GeocodeServer");
+                dojo.connect(locator, "onAddressToLocationsComplete", showResults);
+
+            }
+
+
+            function locate() {
+
+
+                if (counter == 0) {
+                    email = dojo.byId("Textemail").value;
+                    var test = email.indexOf('@');
+                }
+
+                
+                if (dojo.byId("textBName").value == "") {
+                    alert("Please Enter an Investor Name.");
+                    return false;
+                }
+
+                else if (dojo.byId("textOName").value == "") {
+                    alert("Please Enter a business Name.");
+                    return false;
+                }
+
+                else if (dojo.byId("Textaddress").value == "") {
+                    alert("Please Enter an address.");
+                    return false;
+                }
+
+                else if (dojo.byId("Textcity").value == "") {
+                    alert("Please Enter a city.");
+                    return false;
+                }
+
+                else if (dojo.byId("TextZip").value == "") {
+                    alert("Please Enter a zip code.");
+                    return false;
+                }
+
+                else if (dojo.byId("Textemail").value == "" || test == -1) {
+                    alert("Please Enter a valid email address.");
+                    return false;
+                }
+
+           
+
+                if (counter == 0){
+                    reenter()
+                    return false;
+                }
+
+                if (counter >= 1 && dojo.byId("Textemail").value.toString()==email) {
+                    geocode();
+                }
+
+                if (counter >= 1 && dojo.byId("Textemail").value.toString() !== email) {
+                    alert("Email entries don't match!");
+                    document.getElementById("Textemail").value = "";
+                    counter = counter + 1;
+                    
+                }
+
+
+            }
+
+
+            function reenter() {
+
+               
+
+                document.getElementById("Textemail").value = "";
+                alert("Please re-enter email address");
+
+                counter = counter + 1;
+                return false;
+
+            }
+
+
+            function geocode(){
+                map.graphics.clear();
+
+                document.getElementById("QualVal").innerHTML = "";
+                document.getElementById("TypeVal").innerHTML = "";
+                document.getElementById("NameVal").innerHTML = "";
+                document.getElementById("RateVal").innerHTML = "";
+                document.getElementById('btnGenerate').style.visibility = "hidden";
+                address = { "SingleLine": dojo.byId("Textaddress").value + "," + dojo.byId("Textcity").value + "," + dojo.byId("TextState").value + "," + dojo.byId("TextZip").value };
+              
+                geocoder.GeocodeAddress(dojo.byId("Textaddress").value, dojo.byId("Textcity").value, dojo.byId("TextState").value, dojo.byId("TextZip").value);
+
+            }
+
+            function handleSuccess(data, status, xhr) {
+                $("#results").html("Formated address" + data.FormattedAddress + "<br />XCoord: " + data.Longitude + "<br />YCoord: " + data.Latitude + "<br />Calculation method: " + data.CalculationMethod + "<br />Confidence: " + data.Confidence);
+
+                MatchedAddress = data.FormattedAddress;
+                AddressArray = MatchedAddress.split(",")
+                BusStreet = AddressArray[0];
+                BusCity = AddressArray[1];
+                BusZip = AddressArray[2];
+                BusZip= BusZip.slice(3,9)
+
+
+                var X = data.Latitude;
+                var Y = data.Longitude;
+                AddressPoint = new esri.geometry.Point(Y, X, new esri.SpatialReference({ wkid: 4326 }));
+
+
+                var symbol = new esri.symbol.PictureMarkerSymbol('Images/FlagRed32.png', 50, 50);
+
+                var graphic = new esri.Graphic(AddressPoint, symbol);
+                map.graphics.add(graphic);
+                map.centerAndZoom(AddressPoint, 18);
+
+                showResults(AddressPoint);
+
+            }
+
+
+            function clear() {
+              
+                document.getElementById("Textemail").value = "";
+                alert("Please re-enter email address");
+                
+            }
+
+
+            function handleError(data, status, xhr) {
+                $("#results").html("Error");
+            }
+
+
+
+            function TA() {
+                var xmn = map.extent.xmin;
+                var xmx = map.extent.xmax;
+                var ymn = map.extent.ymin;
+                var ymx = map.extent.ymax;
+                var Ptx = passgeom.x;
+                var Pty = passgeom.y;
+                var OName = document.getElementById("textOName").value;
+                var BName = document.getElementById("textBName").value;
+                var placename = document.getElementById("NameVal").value;
+                var type = document.getElementById("TypeVal").value;
+                var zip = document.getElementById("TextZip").value;
+                var mail = document.getElementById("Textemail").value;
+              
+                var SRef = passgeom.spatialReference;
+
+                
+                window.open("http://maps.gis.ca.gov/CensTracts/CensusTracts.aspx?Xmin=" + xmn + "&Xmax=" + xmx + "&Ymin=" + ymn + "&Ymax=" + ymx + "&PTx=" + Ptx + "&PTy=" + Pty + "&BStreet=" + BusStreet + "&BCity=" + BusCity + "&BZip=" + BusZip + "&OwnName=" + OName + "&BizName=" + BName + "&LayerName=Nothing" + "&SENDER=TA" + "&Etext=" + mail + "&GEOM=PT");
+                location.reload();
+
+            }
+
+
+            function Generate() {
+
+                var xmn = map.extent.xmin;
+                var xmx = map.extent.xmax;
+                var ymn = map.extent.ymin;
+                var ymx = map.extent.ymax;
+
+                var Ptx = geom.x;
+                var Pty = geom.y;
+                var OName = document.getElementById("textOName").value;
+                var BName = document.getElementById("textBName").value;
+                var placename = document.getElementById("NameVal").value;
+                var type = document.getElementById("TypeVal").value;
+                var mail = document.getElementById("Textemail").value;
+
+                window.open("http://maps.gis.ca.gov/CensTracts/CensusTracts.aspx?Xmin=" + xmn + "&Xmax=" + xmx + "&Ymin=" + ymn + "&Ymax=" + ymx + "&PTx=" + Ptx + "&PTy=" + Pty + "&BStreet=" + BusStreet + "&BCity=" + BusCity + "&BZip=" + BusZip + "&OwnName=" + OName + "&BizName=" + BName + "&Place=" + placename + "&LayerName=" + layerid + "&typequal=" + type + "&SENDER=Generate" + "&GEOM=POLY" + "&Etext=" + mail);
+                location.reload();
+
+            }
+
+
+
+            function showResults(AddressPoint) {
+           
+                document.getElementById("ReturnVal").innerHTML = MatchedAddress;
+                document.getElementById("QualVal").innerHTML = "NO";
+                document.getElementById('btnTA').style.visibility = "visible";
+
+                geom = AddressPoint;
+           
+                identifyTask = new esri.tasks.IdentifyTask("http://services.gis.ca.gov/ArcGIS/rest/services/Government/GOBIZ_Qualifying_Areas_2017/MapServer");
+
+                identifyParams = new esri.tasks.IdentifyParameters();
+                identifyParams.tolerance = 0;
+                identifyParams.returnGeometry = true;
+                identifyParams.layerIds = [0];
+                identifyParams.layerOption = esri.tasks.IdentifyParameters.LAYER_OPTION_ALL;
+                identifyParams.width = map.width;
+                identifyParams.height = map.height;
+                identifyParams.geometry = geom;
+                identifyParams.mapExtent = map.extent;
+               
+                var deferred = identifyTask.execute(identifyParams);
+                deferred.addCallback(function (response) {
+
+                    return dojo.map(response, function (result) {
+
+
+                        feature = result.feature;
+                        layerid = result.layerName;
+
+                        feature.attributes.layerName = result.layerName;
+                        document.getElementById("QualVal").innerHTML = "YES";
+                        document.getElementById("TypeVal").innerHTML = feature.attributes['Type'];
+                        document.getElementById("RateVal").innerHTML = feature.attributes['UNEMP_RATE'];
+                        document.getElementById("NameVal").innerHTML = feature.attributes['NAME'];
+                        document.getElementById('btnTA').style.visibility = "hidden";
+                        document.getElementById('btnGenerate').style.visibility = "visible";
+
+                        Gtype = feature.attributes['Type'];
+                        GName = feature.attributes['NAME'];
+
+                        counter = counter + 1;
+
+                        var AddGeom = feature.geometry;
+                        var highlightSymbol = new esri.symbol.SimpleFillSymbol(esri.symbol.SimpleFillSymbol.STYLE_SOLID).setColor(new dojo.Color([0, 0, 255, .75]));
+
+                        var graphic = new esri.Graphic(AddGeom, highlightSymbol);
+
+                        map.graphics.add(graphic);
+
+                        var zoomextent = AddGeom.getExtent().expand(1.5);
+                        map.setExtent(zoomextent);
+                        map.centerandzoom(geom, 12);
+
+                        passgeom = geom;
+
+                        counter = 0;
+
+                        return feature;
+
+                    });
+
+
+                });
+
+                map.centerAndZoom(geom, 12);
+                passgeom = geom;
+                return false;
+
+            }
+
+
+            dojo.ready(init);
+
+
+    </script>
+
+
+    </head>
+    <body class="claro"  >
+        <form id="Form1" runat="server"  scrollbars=style="height: 100%;">
+          
+            <div class="container">
+             <a href="http://business.ca.gov/">   <div class="header">
+                   
+                    <img src="Images/GOBIZ2.png"/>
+                </div></a>
+                <div class="body">
+                    <div class="leftPane">
+                        <div class="ribbonColumn">
+                            <h2 style="color: #0d4a6b; font-size: 17px; font-weight: 100; margin-top: 10px">Enter information below:</h2>
+                            
+                        
+                            <b>Investor or Entity:<br/> <small><i> (no '&' or '@' symbols)</i></small> </b> <br /><input type="text" id="textBName" value="" /><br />
+                            <b>New Business or Project:<br /><small><i> (no '&' or '@' symbols)</i></small></b> <br /><input type="text" id="textOName" value="" /><br />
+                            <b>Street:<small><i> (no apt or ste #'s)</i></small> </b><br /> <input type="text" id="Textaddress" value=""><br />
+                            <b>City:</b><br /> <input type="text" id="Textcity" value=""><br />
+                            <b>State:</b><br /> <input type="text" id="TextState" value=""> <br />
+                            <b>Zip:</b><br /> <input type="text" id="TextZip" value=""><br />
+                            <b>Email:</b><br /> <input type="text" id="Textemail" value=""><br />
+          
+          <br />
+       
+      <input type="button" class="btn" id="btnlocate" value="Go to Address"  onclick="locate()"/>
+      <p> <input type="button" class="btn" id="btnTA" value="Request Special TEA" onclick="TA()"/></p>
+      <input type="button" style="visibility:hidden" id="btnGenerate" value="Generate Submission" onclick="Generate()">                      
+
+        <div class="resultsDiv">
+                               <b>RESULTS:</b>
+          <br />
+          <asp:Label class="resulttext" ID="ReturnVal" runat="server" Content=""></asp:Label> 
+          <br />
+       
+          <br />
+          <b>Qualified:</b>  <asp:Label ID="QualVal" class="resulttext" runat="server" Text=""></asp:Label>
+          <br />
+          <br />
+          <b>Type:</b>  <asp:Label ID="TypeVal" class="resulttext" runat="server" Text=""></asp:Label>
+          <br />
+          <br />
+          <b>Unemployment Rate:</b>  <asp:Label ID="RateVal" class="resulttext" runat="server" Text=""></asp:Label>
+          <br />
+          <br />
+          <b>Name:</b>  <asp:Label ID="NameVal" class="resulttext" runat="server" Text=""></asp:Label>
+          <br />
+          <br />
+  
+            <img id="oprleftlogo" src="Images/Go_Biz_logo4.png"/>
+
+                                    <div id="AreaVal" ></div>
+                                </div>
+                                <div class="msgBox" id="text">
+                                    
+                                </div>
+                           
+                            
+                            </div>
+                        </div>
+                    </div>
+                        
+                    <div class="mapFrame" id="map"></div>
+
+                    <div class="mapFooter">
+                        Visit our website:
+                        <a target="_blank" href="http://www.business.ca.gov/International/EB5Program.aspx">Go-Biz Website</a> &nbsp;|&nbsp;
+                        Contact us <a href="mailto:EB5Info@gov.ca.gov">EB5Info@gov.ca.gov</a>
+                    </div>
+                </div>
+          
+        </form>
+    </body>
+</html>
+    

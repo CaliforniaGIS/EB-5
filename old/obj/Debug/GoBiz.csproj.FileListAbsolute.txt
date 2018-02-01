@@ -1,0 +1,24 @@
+c:\users\john.carotta\documents\visual studio 2012\Projects\GoBiz\GoBiz\bin\GoBiz.dll
+c:\users\john.carotta\documents\visual studio 2012\Projects\GoBiz\GoBiz\bin\GoBiz.pdb
+c:\users\john.carotta\documents\visual studio 2012\Projects\GoBiz\GoBiz\obj\Debug\GoBiz.csprojResolveAssemblyReference.cache
+c:\users\john.carotta\documents\visual studio 2012\Projects\GoBiz\GoBiz\obj\Debug\GoBiz.dll
+c:\users\john.carotta\documents\visual studio 2012\Projects\GoBiz\GoBiz\obj\Debug\GoBiz.pdb
+C:\Users\john.carotta\Documents\Visual Studio 2012\Projects\GoBiz\GoBiz\bin\GoBiz.dll.config
+C:\Users\john.carotta\Desktop\GOBIZ_7_15\bin\GoBiz.dll.config
+C:\Users\john.carotta\Desktop\GOBIZ_7_15\bin\GoBiz.dll
+C:\Users\john.carotta\Desktop\GOBIZ_7_15\bin\GoBiz.pdb
+C:\Users\john.carotta\Desktop\GOBIZ_7_15\obj\Debug\GoBiz.csprojResolveAssemblyReference.cache
+C:\Users\john.carotta\Desktop\GOBIZ_7_15\obj\Debug\GoBiz.dll
+C:\Users\john.carotta\Desktop\GOBIZ_7_15\obj\Debug\GoBiz.pdb
+C:\Users\john.carotta\Desktop\TEA_1_24\bin\GoBiz.dll.config
+C:\Users\john.carotta\Desktop\TEA_1_24\bin\GoBiz.dll
+C:\Users\john.carotta\Desktop\TEA_1_24\bin\GoBiz.pdb
+C:\Users\john.carotta\Desktop\TEA_1_24\obj\Debug\GoBiz.csprojResolveAssemblyReference.cache
+C:\Users\john.carotta\Desktop\TEA_1_24\obj\Debug\GoBiz.dll
+C:\Users\john.carotta\Desktop\TEA_1_24\obj\Debug\GoBiz.pdb
+C:\Users\john.carotta\Documents\Visual Studio 2013\Projects\EB5_2018\TEA_1_24\bin\GoBiz.dll.config
+C:\Users\john.carotta\Documents\Visual Studio 2013\Projects\EB5_2018\TEA_1_24\bin\GoBiz.dll
+C:\Users\john.carotta\Documents\Visual Studio 2013\Projects\EB5_2018\TEA_1_24\bin\GoBiz.pdb
+C:\Users\john.carotta\Documents\Visual Studio 2013\Projects\EB5_2018\TEA_1_24\obj\Debug\GoBiz.csprojResolveAssemblyReference.cache
+C:\Users\john.carotta\Documents\Visual Studio 2013\Projects\EB5_2018\TEA_1_24\obj\Debug\GoBiz.dll
+C:\Users\john.carotta\Documents\Visual Studio 2013\Projects\EB5_2018\TEA_1_24\obj\Debug\GoBiz.pdb
